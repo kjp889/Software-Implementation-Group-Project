@@ -362,7 +362,7 @@ class ReportsView:
         self.menuBar.add_cascade(menu=self.inventoryMenu, label="Inventory")
         self.menuBar.add_cascade(menu=self.salesMenu, label="Sales")
         
-        self.fileMenu.add_commanrow
+        self.fileMenu.add_command(label="LogOut", command=self.logOut)
         self.fileMenu.add_command(label="Dashboard", command=self.home)
         
         self.reportMenu.add_cascade(label="Generate Report", menu=self.reportGen, command=self.gotoReports)
@@ -640,7 +640,7 @@ class PurchasesView:
     def displayScreen(self):
         
         self.cursor = dbAccess.cursor()
-        self.cursor.execute("SELECT `invoice_num`, `customer_id`, `price` FROM sales where `sales`.`refunded` = 0")
+        self.cursor.execute("SELECT `invoice_num`, `customer_id`, `price` FROM sales")
         self.result = self.cursor.fetchall()
         
         '''self.display_Frame = tk.Frame(self.windowManager)
@@ -671,7 +671,7 @@ class PurchasesView:
         self.headingQty.grid(row=0,column=2,sticky=tk.W+tk.E)
         
         for row_num, row in enumerate(self.result):
-            print(row_num, row)
+            #print(row_num, row)
             for col_num, col in enumerate(row):
                 print(f"({row_num}, {col_num}) -> {col}")
                 
@@ -693,14 +693,7 @@ class PurchasesView:
         messagebox.showerror("Report Generating Error", "Unable to Generate Report at the moment")
 
     def refund(self):
-        
-        self.cursor = dbAccess.cursor()
-        self.cursor.execute("UPDATE `sales` SET `refunded` = '1' WHERE `sales`.`sales_id` = 2")
-        dbAccess.commit()
-        
         messagebox.showinfo("Refund Message", "Successful Refund")
-        
-        self.gotoPurchases()
 
 class InventoryUpdateView:
     
